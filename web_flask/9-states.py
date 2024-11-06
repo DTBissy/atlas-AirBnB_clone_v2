@@ -45,14 +45,26 @@ def number_odd_or_even(n: int):
 @app.route('/states_list', strict_slashes=False)
 def show_the_states():
     """ Function that displays a HTML page that displays aall states created"""
-    states = sorted(storage.all(State).values(), key=lambda state: state.name)
+    states = storage.all(State)
     return render_template('7-states_list.html', states=states)
-
 
 @app.teardown_appcontext
 def teardown(self):
     """removes current SQLAlchemy Session"""
     storage.close()
+
+@app.route('/cities_by_states', strict_slashes=False)
+def show_the_cities():
+    """ function that displays a HTML page displaying cities by state """
+    states = storage.all(State)
+    return render_template('8-cities_by_states.html', states=states)
+
+@app.route('/states', strict_slashes=False)
+def state():
+    """Displays a html page with states"""
+    states = storage.all(State)
+    return render_template('9-states.html', states=states, mode='all')
+
 
 
 if __name__ == '__main__' :
