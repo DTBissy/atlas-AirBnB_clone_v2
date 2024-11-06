@@ -54,10 +54,13 @@ def teardown(self):
     storage.close()
 
 @app.route('/cities_by_states', strict_slashes=False)
-def show_the_cities():
-    """ function that displays a HTML page displaying cities by state """
-    states = storage.all(State)
+def cities_by_states():
+    """
+    Display a HTML page with a list of all State objects and their respective City objects sorted by name.
+    """
+    states = sorted(storage.all(State).values(), key=lambda state: state.name)
     return render_template('8-cities_by_states.html', states=states)
+
 
 if __name__ == '__main__' :
     app.run(host='0.0.0.0', port=5000)
