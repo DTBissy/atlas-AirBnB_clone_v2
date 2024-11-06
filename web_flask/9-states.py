@@ -49,23 +49,27 @@ def show_the_states():
     return render_template('7-states_list.html', states=states)
 
 @app.teardown_appcontext
-def teardown(self):
+def teardown(exception):
     """removes current SQLAlchemy Session"""
     storage.close()
 
-@app.route('/cities_by_states', strict_slashes=False)
-def show_the_cities():
-    """ function that displays a HTML page displaying cities by state """
-    states = storage.all(State)
+@app.route('/states', strict_slashes=False)
+def cities_by_states():
+    """
+    Display a HTML page with a list of all State objects and their respective City objects sorted by name.
+    """
+    states = sorted(storage.all(State).values(), key=lambda state: state.name)
     return render_template('8-cities_by_states.html', states=states)
 
-@app.route('/states', strict_slashes=False)
-def state():
-    """Displays a html page with states"""
-    states = storage.all(State)
-    return render_template('9-states.html', states=states, mode='all')
+@app.route('/states/<id>', strict_slashes=False)
+def states_cities(id):
+    """
+    Display a HTML page with a list of City objects linked to the State sorted by name.
+    """
+    state = storage.get(State, id)
 
-
+    cities = sorted(state.cities, key=lambda city: city.name)
+    return render_template('9-states.html', state=state, cities=cities)
 
 if __name__ == '__main__' :
     app.run(host='0.0.0.0', port=5000)
