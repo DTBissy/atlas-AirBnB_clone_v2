@@ -48,6 +48,12 @@ def show_the_states():
     states = storage.all()
     return render_template('7-states_list.html', states=states)
 
+@app.route('/cities_by_states', strict_slashes=False)
+def show_the_cities():
+    """ function that displays a HTML page displaying cities by state """
+    states = storage.all(State)
+    return render_template('8-cities_by_states.html', states=states)
+
 @app.teardown_appcontext
 def teardown(self):
     """removes current SQLAlchemy Session"""
